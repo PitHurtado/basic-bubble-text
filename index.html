@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bubble Text Animation | PitHurtado</title>
+</head>
+<style>
+  html { 
+  background: url(/resources/earth.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  }
+
+  *{
+    padding: 1px;
+    margin-top: 0;
+    margin-bottom: 100px;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    transition: all;
+    transition-duration: 0.35s;
+  }
+  body{
+    /* background: #010104; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  h1{
+    font-size: 100px;
+    color: #cacae8;
+    font-weight: 100;
+    cursor: default;
+  }
+
+  .hovered{
+    color: #e1e1f6;
+    font-weight: 700;
+  }
+
+  .hovered-adjacent{
+    color: #b5b5e6;
+    font-weight: 500;
+  }
+</style>
+<body>
+  <h1 id="bubble-hover"></h1>
+  <script>
+    const phrase = "Practice Makes Perfect";
+    const target = document.getElementById('bubble-hover');
+
+    phrase.split("").map((char,idx)=>{
+      const el = document.createElement('span');
+      el.innerText = char;
+      el.setAttribute("data-index", idx.toString());
+      el.classList.add("hover-char");
+      target.appendChild(el);
+
+    });
+
+    const hoverChars = [...document.getElementsByClassName('hover-char')];
+
+    const removeClasses = () =>{
+      hoverChars.map((char)=>{
+        char.classList.remove("hovered");
+        char.classList.remove("hovered-adjacent");
+      });
+    };
+
+    hoverChars.map((char) => {
+      char.addEventListener("mouseover", (e)=>{
+        removeClasses();
+        const currentElement = e.target;
+        const index = parseInt(currentElement.getAttribute("data-index"), 10);
+        const prevIndex = index === 0 ? null: index - 1;
+        const nextIndex = index === phrase.length - 1 ? null: index + 1;
+
+        const prevEl = 
+          prevIndex !== null &&
+          document.querySelector(`[data-index="${prevIndex}"]`);
+        const nextEl = 
+          nextIndex !== null &&
+          document.querySelector(`[data-index="${nextIndex}"]`);
+        e.target.classList.add('hovered');
+        prevEl && prevEl.classList.add("hovered-adjacent");
+        nextEl && nextEl.classList.add("hovered-adjacent");
+      });
+    });
+    document
+      .getElementById("bubble-hover")
+      .addEventListener("mouseleave", ()=>{
+        removeClasses();
+      });
+  </script>
+</body>
+</html>
